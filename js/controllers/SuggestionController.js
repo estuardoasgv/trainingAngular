@@ -1,33 +1,49 @@
-app.controller('SuggestionController', ['$scope', 'suggestions', function($scope, suggestions) {
-    $scope.newPosts = {};
-    $scope.posts = suggestions.data;
-    
-    $scope.increase = function(id) {
-        $scope.posts.forEach(posts => {
-            if(posts.id === id ){
-                posts.upvotes += 1;
-            }
-        });
-    };
-    $scope.decrease = function(id) {
-        $scope.posts.forEach(posts => {
-            if(posts.id === id ){ 
-                if(posts.upvotes === 0) {
-                    posts.upvotes = 0;
-                } else {
-                    posts.upvotes -= 1;
-                }
-            } 
+(function() {
+    'use strict';
+            
+    angular
+    .module('SuggestionsApp')
+    .controller('SuggestionController', SuggestionController);
 
-        });
-    };
-    $scope.saveData = function(){ 
-        $scope.newPosts.upvotes = 0;
-        $scope.newPosts.comments = [];
-        $scope.newPosts.id = $scope.posts.length + 1;
-        $scope.posts.push($scope.newPosts);
-        $scope.suggestionForm.$submitted = false;
+    SuggestionController.$inject = ['$scope', 'suggestions'];
+
+    function SuggestionController($scope, suggestions){
         $scope.newPosts = {};
-        $('#btnClose').click();
-    };
-}])
+        $scope.posts = suggestions.data; 
+        $scope.increase = increaseF; 
+        $scope.decrease = decreaseF;
+        $scope.saveData = saveDataF;
+        
+        function increaseF(id) {
+            $scope.posts.forEach(posts => {
+                if(posts.id === id ){
+                    posts.upvotes += 1;
+                }
+            });
+        }; 
+
+        function decreaseF(id) {
+            $scope.posts.forEach(posts => {
+                if(posts.id === id ){ 
+                    if(posts.upvotes === 0) {
+                        posts.upvotes = 0;
+                    } else {
+                        posts.upvotes -= 1;
+                    }
+                } 
+
+            });
+        }; 
+
+        function saveDataF(){ 
+            $scope.newPosts.upvotes = 0;
+            $scope.newPosts.comments = [];
+            $scope.newPosts.id = $scope.posts.length + 1;
+            $scope.posts.push($scope.newPosts);
+            $scope.suggestionForm.$submitted = false;
+            $scope.newPosts = {};
+            $('#btnClose').click();
+        };
+    }
+
+})();
