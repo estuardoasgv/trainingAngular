@@ -1,0 +1,78 @@
+    <div class="row justify-content-md-center">
+        <div class="col-md-8">
+           <div class="my-3 p-3 bg-white rounded shadow-sm">
+              <div class=" border-bottom border-gray my-2 my-lg-0 clearfix">
+                 <h6 class="pull-left pt-2">Detail</h6>
+                 <button class="btn btn-outline-success btn-sm  mb-2 pull-right" type="button" data-toggle="modal" data-target="#commentModal"><i class="fa fa-file-o"></i> Add Coments</button>
+              </div>
+              <div class="media text-muted pt-3">
+                 <div class="col-md-9">
+                    <p class="media-body pb-3 mb-0 small lh-125 ">
+                       <a href=""><strong class="d-block sugg-comment text-gray-dark">@{{ post.username }}</strong></a>
+                       {{ post.title }}
+                    </p>
+                 </div>
+                 <div class="col-md-3">
+                    <div class="input-group mb-3"> 
+                       <input type="text" class="form-control mr-1 control" value="{{ post.upvotes }}" min="1" disabled> 
+                    </div>
+                 </div>
+              </div>
+              <div class="comment mt-3">
+                 <div class="comment-body mt-3" ng-repeat="comment in comments | orderBy:'-upvotes'">
+                    <div class="text">
+                       <p>{{ comment.comment }}</p>
+                       <div class="input-group mb-3">
+                           <div class="input-group-prepend mr-1">
+                              <button class="btn btn-danger" ng-click="decreaseComment(comment.id)"><i class="fa fa-minus"></i></button>
+                           </div>
+                           <input type="text" class="form-control mr-1 control" value="{{ comment.upvotes }}" disabled>
+                           <div class="input-group-prepend mr-1">
+                              <button class="btn btn-success" ng-click="increaseComment(comment.id)"><i class="fa fa-plus"></i></button>
+                           </div>
+                        </div>
+                        <p class="attribution">by <a href="#non">@{{ comment.nickname }}</a> at {{  comment.date | date:'yyyy-MM-dd' }}</p>
+                    </div>
+                   
+                 </div>
+              </div>
+           </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+           <div class="modal-content">
+              <div class="modal-header">
+                 <h5 class="modal-comment" id="exampleModalLabel">New Comment</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                 </button>
+              </div>
+              <form required
+                 name="commentForm" 
+                 ng-submit="saveComment(commentForm.$valid)" >
+                 <div class="modal-body">
+                    
+                    <div class="form-group" ng-class="{ 'has-error': !commentForm.comment.$valid && !commentForm.$pristine, 'has-success': commentForm.comment.$valid}" >
+                       <label>Comment</label>
+                       <textarea 
+                          rows="5"  
+                          type="text" 
+                          id="comment"
+                          name="comment"
+                          class="form-control form-control-sm" 
+                          placeholder="Enter a new Comment" 
+                          ng-model="newComment.comment" 
+                          required="required"></textarea>
+                       <span ng-show="commentForm.comment.$touched && commentForm.comment.$invalid && commentForm.$submitted">The Comment is required.</span>
+                    </div> 
+                 </div>
+                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" id="btnClose">Close</button> 
+                    <button ng-disabled="commentForm.comment.$invalid" type="submit" class="btn btn-primary btn-sm""> Save </button>
+                 </div>
+              </form>
+           </div>
+        </div>
+     </div> 

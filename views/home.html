@@ -1,0 +1,88 @@
+<div class="row justify-content-md-center">
+        <div class="col-md-8">
+           <div class="my-3 p-3 bg-white rounded shadow-sm">
+                
+                <div class=" border-bottom border-gray my-2 my-lg-0 clearfix"> 
+                    <h6 class="pull-left pt-2">All Suggestions</h6>
+                    <button class="btn btn-outline-success btn-sm  mb-2 pull-right" type="button" data-toggle="modal" data-target="#suggestionModal"><i class="fa fa-file-o"></i> New Suggestion</button>
+                </div>
+
+              <div class="media text-muted pt-3 border-bottom border-gray" ng-repeat="post in posts | orderBy:'-upvotes'">
+                 
+                 <div class="col-md-8">
+                    <p class="media-body pb-3 mb-0 small lh-125 ">
+                       <a href="#/suggestion/{{ post.id }}" ><strong class="d-block sugg-title text-gray-dark">@{{ post.username }}</strong></a>
+                       {{ post.title }}
+                    </p>
+                    
+                 </div>
+                 <div class="col-md-3">
+                    <div class="input-group mb-3">
+                       <div class="input-group-prepend mr-1">
+                          <button class="btn btn-danger" ng-click="decrease(post.id)"><i class="fa fa-minus"></i></button>
+                       </div>
+                       <input type="text" class="form-control mr-1 control" value="{{ post.upvotes }}" disabled>
+                       <div class="input-group-prepend mr-1">
+                          <button class="btn btn-success" ng-click="increase(post.id)"><i class="fa fa-plus"></i></button>
+                       </div>
+                    </div>
+                 </div>
+
+                 <div class="col-md-1 ">
+                    <a class="btn btn-primary  mb-1" href="#/suggestion/{{ post.id }}"><i class="fa fa-comments"></i></a>
+                 </div>
+              </div> 
+
+           </div>
+        </div>
+     </div> 
+    <!-- Modal -->
+    <div class="modal fade" id="suggestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                 <h5 class="modal-title" id="exampleModalLabel">New Suggestion</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                 </button>
+              </div>
+
+              <form required
+                 name="suggestionForm" 
+                 ng-submit="saveData( suggestionForm.$valid )" >
+                 <div class="modal-body">
+                    <div class="form-group" ng-class="{ 'has-error': !suggestionForm.username.$valid && !suggestionForm.$pristine, 'has-success': suggestionForm.username.$valid}" >
+                          <label for="exampleInputEmail1">Username</label>
+                          <input 
+                             type="text" 
+                             id="username"
+                             name="username"
+                             class="form-control form-control-sm" 
+                             placeholder="Enter your username" 
+                             ng-model="newPosts.username" 
+                             required="required">
+                          <span ng-show="suggestionForm.username.$touched && suggestionForm.username.$invalid  && suggestionForm.$submitted">The username is required.</span>
+                    </div> 
+                    <div class="form-group" ng-class="{ 'has-error': !suggestionForm.title.$valid && !suggestionForm.$pristine, 'has-success': suggestionForm.title.$valid}" >
+                          <label for="exampleInputEmail1">Suggestion</label>
+                          <input 
+                             type="text" 
+                             id="title"
+                             name="title"
+                             class="form-control form-control-sm" 
+                             placeholder="Enter a new Suggestion" 
+                             ng-model="newPosts.title" 
+                             required="required">
+                          <span ng-show="suggestionForm.title.$touched && suggestionForm.title.$invalid && suggestionForm.$submitted">The suggestion is required.</span>
+                    </div> 
+                 </div>
+              
+                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" id="btnClose">Close</button> 
+                    <button ng-disabled="suggestionForm.title.$invalid || suggestionForm.username.$invalid" type="submit" class="btn btn-primary btn-sm""> Save </button>
+                 </div>
+              </form>
+
+            </div>
+        </div>
+    </div>
